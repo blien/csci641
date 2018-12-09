@@ -104,6 +104,7 @@ def writeFeatureInfo(filePointer,jsonLine):
                                     maxFollowers = obj[k]["followers"]
                                 twitterIds.append(obj[k]["tweeter_id"])
 
+
     print("Feature info")
     print("numAuthors",citationType,mendeleyCount, readerCount,numAuthors,authors)
     print("socialMediaCounts",maxFollowers,totalFollowers,twitterCount,twitterUniqueCount,googlePlusCount,googlePlusUniqueCount,fbCounts,fbUniqueCount,twitterIds)
