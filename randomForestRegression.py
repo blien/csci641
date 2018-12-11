@@ -22,7 +22,7 @@ from sklearn.ensemble import RandomForestClassifier
     filePointer.write('\n')
 """
 
-featureColumns=['ALmetId','MendeleyCount','ReaderCount','numAuthors','citatiionType', 'FbCounts','FbUniqueCount','G+Count','G+Unique','TwitterCount',\
+featureColumns=['ALmetId','MendeleyCount','ReaderCount','numAuthors','citationType', 'FbCounts','FbUniqueCount','G+Count','G+Unique','TwitterCount',\
                'twitterUniqueCount','TwitterMaxFollowers','TwitterTotalFollowers','blank']
 """
 Paths to data
@@ -36,18 +36,29 @@ smallestSetPath = 'E:\\School\\CSCI-641\\Data\\smallestDataSet\\featureInfoNoLis
 
 pandaData = pd.read_csv(smallestSetPath,names=featureColumns,low_memory=False)
 
+pandaData = pandaData.drop(['blank'],axis=1)
 cols = pandaData.columns[pandaData.dtypes.eq('object')]
-pandaData[cols] = pandaData[cols].apply(pd.to_numeric, errors='coerce')
-pandaData = pandaData.replace(np.nan, 0)
+print(cols)
+pandaData[cols] = pandaData[cols].apply(lambda x: pd.factorize(x)[0])
+pandaData[cols].stack().rank(method='dense').unstack()
+#print(pandaData[cols])
 
-print(pandaData[cols])
-
+#print(pandaData[cols])
 print(pandaData.dtypes)
+#print(pandaData[cols])
+
+print(pandaData.__len__())
+pandaData = pandaData.replace([np.inf, -np.inf], np.nan)
+pandaData = pandaData.dropna()
+print(pandaData.__len__())
+
 
 inputs = pandaData['MendeleyCount']
 #print(X)
 
 target = pandaData.drop(['MendeleyCount'],axis=1)
+
+
 #print(Y)
 
 x_train, x_test, y_train, y_test = train_test_split(target,inputs,test_size=0.33)
